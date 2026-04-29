@@ -27,11 +27,13 @@ static void	sort_stack(t_list **stack_a, t_list **stack_b, char *algo_flag)
 			medium_sort(stack_a, stack_b);
 		else if (!ft_strcmp(algo_flag, "--complex"))
 			radix_sort(stack_a, stack_b);
+		else if (!ft_strcmp(algo_flag, "--adaptive"))
+			adaptive_sort(stack_a, stack_b);
 	}
 	else if (ft_lstsize(*stack_a) <= 5)
 		simple_sort(stack_a, stack_b);
 	else
-		radix_sort(stack_a, stack_b);
+		adaptive_sort(stack_a, stack_b);
 }
 
 static void	remove_arg_at_index(int *argc, char **argv, int index)
@@ -65,7 +67,8 @@ static int	parse_args(int *argc, char **argv, char **algo_flag)
 		}
 		else if (!ft_strcmp(argv[i], "--simple")
 			|| !ft_strcmp(argv[i], "--medium")
-			|| !ft_strcmp(argv[i], "--complex"))
+			|| !ft_strcmp(argv[i], "--complex")
+			|| !ft_strcmp(argv[i], "--adaptive"))
 		{
 			*algo_flag = argv[i];
 			remove_arg_at_index(argc, argv, i);

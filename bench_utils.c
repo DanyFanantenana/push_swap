@@ -49,6 +49,8 @@ char	*get_strategy_name(char *flag, float disorder)
 			return ("Medium / O(n√n)");
 		if (!ft_strcmp(flag, "--complex"))
 			return ("Complex / O(n log n)");
+		if (!ft_strcmp(flag, "--adaptive"))
+			return ("Adaptive / mixed");
 	}
 	if (disorder < 0.2)
 		return ("Adaptive / O(n²)");
@@ -92,20 +94,8 @@ void	exec_algo(char *flag, t_list **a, t_list **b, t_bench *bench)
 		medium_sort(a, b);
 	else if (!ft_strcmp(flag, "--complex"))
 		radix_sort(a, b);
+	else if (!ft_strcmp(flag, "--adaptive"))
+		adaptive_sort(a, b);
 	else
-		radix_sort(a, b);
-}
-
-void	ft_adaptive_algo(t_list **a, t_list **b, t_bench *bench)
-{
-	float	disorder;
-
-	disorder = compute_disorder(a);
-	g_current_bench = bench;
-	if (disorder < 0.2)
-		simple_sort(a, b);
-	else if (disorder < 0.5)
-		medium_sort(a, b);
-	else
-		radix_sort(a, b);
+		adaptive_sort(a, b);
 }

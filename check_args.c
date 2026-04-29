@@ -29,11 +29,31 @@ static int	ft_isnum(char *num)
 	int	i;
 
 	i = 0;
+	if (!num || !num[0])
+		return (0);
 	if (num[0] == '-')
 		i++;
+	if (!num[i])
+		return (0);
 	while (num[i])
 	{
 		if (!ft_isdigit(num[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+static int	ft_is_empty_arg(char *arg)
+{
+	int	i;
+
+	i = 0;
+	if (!arg)
+		return (1);
+	while (arg[i])
+	{
+		if (arg[i] != ' ')
 			return (0);
 		i++;
 	}
@@ -50,34 +70,32 @@ void	ft_check_args(int argc, char **argv)
 		i = 0;
 	else
 		i = 1;
+	if (argc == 2 && ft_is_empty_arg(argv[1]))
+		ft_error();
 	if (argc == 2)
 		args = ft_split(argv[1], ' ');
 	else
 		args = argv;
-	/* while (args[i])
+	if (argc == 2 && (!args || !args[0]))
 	{
-		tmp = ft_atoi(args[i]);
-		if (!ft_isnum(args[i]))
-			ft_error();
-		if (ft_contains(tmp, args, i))
-			ft_error();
-		if (tmp < -2147483648 || tmp > 2147483647)
-			ft_error();
-		i++;
+		if (args)
+			ft_free(args);
+		ft_error();
 	}
-	if (argc == 2)
-		ft_free(args); */
 	while (args[i])
 	{
 		tmp = ft_atoi(args[i]);
-		if (!ft_isnum(args[i]) || ft_contains(tmp, args, i) || tmp < -2147483648 || tmp > 2147483647)
+		if (!ft_isnum(args[i]) || ft_contains(tmp, args, i) || tmp < -2147483648
+			|| tmp > 2147483647)
 		{
-			if (argc == 2) // ← free args AVANT ft_error()
+			if (argc == 2)
 				ft_free(args);
 			ft_error();
 		}
 		i++;
 	}
+	if (argc == 2)
+		ft_free(args);
 }
 
 void	initstack(t_list **stack, int argc, char **argv)
