@@ -3,10 +3,10 @@ CHECK = checker
 
 ALL_SRCS = check_args.c ft_atoi.c ft_isdigit.c \
 		ft_putendl_fd.c ft_putnbr_fd.c ft_split.c ft_strcmp.c \
-		index.c instructions.c radix.c simple.c medium.c get_next_line.c \
-		get_next_line_utils.c ft_putchar_fd.c ft_putstr_fd.c ft_bzero.c t_list.c utils.c \
-		rotate.c revrotate.c \
-		bench.c bench_utils.c bench_p_utils.c bench_r_utils.c bench_s_utils.c
+	index.c instructions.c radix.c simple.c medium.c get_next_line.c \
+	get_next_line_utils.c ft_putchar_fd.c ft_putstr_fd.c ft_bzero.c t_list.c utils.c \
+	rotate.c revrotate.c adaptive.c \
+	bench.c bench_utils.c bench_p_utils.c bench_r_utils.c bench_s_utils.c
 
 SRCS = $(ALL_SRCS) main.c
 CHECK_SRCS = $(ALL_SRCS) checker.c
