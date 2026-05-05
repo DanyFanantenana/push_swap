@@ -13,10 +13,9 @@
 #include "bench.h"
 #include "push_swap.h"
 
-//int		g_is_bench = 0;
 t_bench	*g_current_bench = NULL;
 
-static void	print_bench_details(t_bench *bench)
+static void	print_bench_ops(t_bench *bench)
 {
 	ft_putstr_fd("[bench] sa: ", 2);
 	ft_putnbr_fd(bench->sa, 2);
@@ -30,6 +29,11 @@ static void	print_bench_details(t_bench *bench)
 	ft_putnbr_fd(bench->pb, 2);
 	ft_putstr_fd("\n[bench] ra: ", 2);
 	ft_putnbr_fd(bench->ra, 2);
+}
+
+static void	print_bench_rotations(t_bench *bench)
+{
+	print_bench_ops(bench);
 	ft_putstr_fd(" rb: ", 2);
 	ft_putnbr_fd(bench->rb, 2);
 	ft_putstr_fd(" rr: ", 2);
@@ -61,7 +65,7 @@ static void	print_bench(t_bench *bench, float disorder, char *strategy)
 	ft_putstr_fd("\n[bench] total_ops:  ", 2);
 	ft_putnbr_fd(get_total_ops(bench), 2);
 	ft_putstr_fd("\n", 2);
-	print_bench_details(bench);
+	print_bench_rotations(bench);
 }
 
 void	run_benchmark(t_list **a, t_list **b, char *flag)
@@ -72,7 +76,7 @@ void	run_benchmark(t_list **a, t_list **b, char *flag)
 
 	init_bench(&bench);
 	disorder = compute_disorder(a);
-	strategy = get_strategy_name(flag, disorder);
+	strategy = get_strategy_name(flag, disorder, ft_lstsize(*a));
 	if (flag)
 		exec_algo(flag, a, b, &bench);
 	else

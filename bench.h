@@ -43,7 +43,7 @@ void					bench_rra(t_bench *bench);
 void					bench_rrb(t_bench *bench);
 void					bench_rrr(t_bench *bench);
 int						get_total_ops(t_bench *bench);
-char					*get_strategy_name(char *flag, float disorder);
+char					*get_strategy_name(char *flag, float disorder, int size);
 void					run_benchmark(t_list **a, t_list **b, char *flag);
 float					compute_disorder(t_list **a);
 void					exec_algo(char *flag, t_list **a, t_list **b,

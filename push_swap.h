@@ -17,11 +17,9 @@
 
 typedef struct s_bench	t_bench;
 
-// Bench globals
 extern int				g_is_bench;
 extern t_bench			*g_current_bench;
 
-// Stack
 typedef struct s_list
 {
 	int				value;
@@ -29,7 +27,6 @@ typedef struct s_list
 	struct s_list	*next;
 }				t_list;
 
-// Util functions
 t_list	*ft_lstnew(int value);
 t_list	*ft_lstlast(t_list *head);
 void	ft_lstadd_front(t_list **stack, t_list *new);
@@ -45,14 +42,13 @@ void	free_stack(t_list **stack);
 void	ft_free(char **str);
 void	initstack(t_list **stack, int argc, char **argv);
 
-// Algorithm utils
 void	radix_sort(t_list **stack_a, t_list **stack_b);
 void	simple_sort(t_list **stack_a, t_list **stack_b);
 void	medium_sort(t_list **stack_a, t_list **stack_b);
+void	adaptive_sort(t_list **stack_a, t_list **stack_b);
 void	index_stack(t_list **stack);
 void	sort_5(t_list **stack_a, t_list **stack_b);
 
-// Instruction functions
 int		swap(t_list **stack);
 int		push(t_list **stack_to, t_list **stack_from);
 int		rotate(t_list **stack);

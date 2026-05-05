@@ -18,9 +18,6 @@
 # include <stdlib.h>
 # include <unistd.h>
 
-//# define BUFF_SIZE (1)
-//# define MAX_FD (1025)
-
 void	ft_putendl_fd(char *str, int fd);
 void	ft_putnbr_fd(int n, int fd);
 int		ft_isdigit(int c);

@@ -30,6 +30,21 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
+static size_t	copy_to_join(char *join, char const *s1)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s1)
+		return (0);
+	while (s1[i])
+	{
+		join[i] = s1[i];
+		i++;
+	}
+	return (i);
+}
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*join;
@@ -41,15 +56,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	join = (char *)malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
 	if (!join)
 		return (NULL);
-	i = 0;
-	if (s1)
-	{
-		while (s1[i])
-		{
-			join[i] = s1[i];
-			i++;
-		}
-	}
+	i = copy_to_join(join, s1);
 	j = 0;
 	while (s2[j])
 	{

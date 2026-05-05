@@ -13,8 +13,6 @@
 #include "push_swap.h"
 #include "bench.h"
 
-// Swaps first two elements of a stack | sa and sb
-
 int	swap(t_list **stack)
 {
 	t_list	*head;
@@ -69,31 +67,25 @@ int	ss(t_list **stack_a, t_list **stack_b)
 	return (0);
 }
 
-// Takes the first element of one stack and 
-//puts it at the top of another | pa and pb
-
 int	push(t_list **stack_to, t_list **stack_from)
 {
 	t_list	*tmp;
-	t_list	*head_to;
 	t_list	*head_from;
 
 	if (ft_lstsize(*stack_from) == 0)
 		return (-1);
-	head_to = *stack_to;
 	head_from = *stack_from;
 	tmp = head_from;
 	head_from = head_from->next;
 	*stack_from = head_from;
-	if (!head_to)
+	if (!*stack_to)
 	{
-		head_to = tmp;
-		head_to->next = NULL;
-		*stack_to = head_to;
+		tmp->next = NULL;
+		*stack_to = tmp;
 	}
 	else
 	{
-		tmp->next = head_to;
+		tmp->next = *stack_to;
 		*stack_to = tmp;
 	}
 	return (0);
@@ -119,8 +111,3 @@ int	pb(t_list **stack_a, t_list **stack_b)
 	return (0);
 }
 
-// Shift up all elements of a stack by 1. 
-//The first element becomes the last one | ra and rb
-
-// Shifts down all elements of a stack by 1. 
-//The last element becomes the first one | rra and rrb

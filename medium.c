@@ -11,88 +11,82 @@
 /* ************************************************************************** */
 
 #include "push_swap.h"
-#include <math.h>
-#include <limits.h>
 
 static int	get_chunk_size(int size)
 {
-	int	chunk;
-
-	chunk = (int)sqrt((double)size);
-	if (chunk < 1)
-		chunk = 1;
-	return (chunk);
+	if (size <= 100)
+		return (15);
+	return (35);
 }
 
-static void	push_chunk_to_b(t_list **stack_a, t_list **stack_b,
-	int chunk_min, int chunk_max)
+static int	find_max_index(t_list **stack)
 {
-	int	size;
-	int	j;
+	t_list	*head;
+	int		max;
 
-	size = ft_lstsize(*stack_a);
-	j = 0;
-	while (j < size)
+	head = *stack;
+	max = head->index;
+	while (head)
 	{
-		if ((*stack_a)->index >= chunk_min && (*stack_a)->index <= chunk_max)
+		if (head->index > max)
+			max = head->index;
+		head = head->next;
+	}
+	return (max);
+}
+
+static void	push_to_b(t_list **a, t_list **b, int chunk)
+{
+	int	pushed;
+
+	pushed = 0;
+	while (*a)
+	{
+		if ((*a)->index <= pushed)
 		{
-			pb(stack_a, stack_b);
+			pb(a, b);
+			rb(b);
+			pushed++;
+		}
+		else if ((*a)->index <= pushed + chunk)
+		{
+			pb(a, b);
+			pushed++;
 		}
 		else
-		{
-			ra(stack_a);
-		}
-		j++;
+			ra(a);
 	}
 }
 
-static void	push_back_sorted(t_list **stack_a, t_list **stack_b)
+static void	push_max_to_a(t_list **a, t_list **b)
 {
+	int	max;
+	int	distance;
 	int	size;
-	int	j;
 
-	while (ft_lstsize(*stack_b) > 0)
-	{
-		size = ft_lstsize(*stack_b);
-		j = 0;
-		while (j < size)
-		{
-			if (ft_lstsize(*stack_b) > 0 && (*stack_b)->index == 0)
-			{
-				pa(stack_a, stack_b);
-				ra(stack_a);
-			}
-			else if (ft_lstsize(*stack_b) > 0)
-			{
-				rb(stack_b);
-			}
-			j++;
-		}
-		if (ft_lstsize(*stack_b) > 0)
-			break ;
-	}
+	max = find_max_index(b);
+	distance = get_distance(b, max);
+	size = ft_lstsize(*b);
+	if (distance <= size / 2)
+		while (distance-- > 0)
+			rb(b);
+	else
+		while (distance++ < size)
+			rrb(b);
+	pa(a, b);
 }
 
 void	medium_sort(t_list **stack_a, t_list **stack_b)
 {
 	int	size;
-	int	chunk_size;
-	int	i;
-	int	chunk_min;
-	int	chunk_max;
 
 	size = ft_lstsize(*stack_a);
-	chunk_size = get_chunk_size(size);
-	i = 0;
-	while (i < size)
+	if (size <= 5)
 	{
-		chunk_min = i;
-		if (i + chunk_size < size)
-			chunk_max = i + chunk_size - 1;
-		else
-			chunk_max = size - 1;
-		push_chunk_to_b(stack_a, stack_b, chunk_min, chunk_max);
-		i += chunk_size;
+		simple_sort(stack_a, stack_b);
+		return ;
 	}
-	push_back_sorted(stack_a, stack_b);
+	push_to_b(stack_a, stack_b, get_chunk_size(size));
+	while (*stack_b)
+		push_max_to_a(stack_a, stack_b);
 }

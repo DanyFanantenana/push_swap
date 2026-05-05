@@ -32,29 +32,34 @@ static int	get_max_bits(t_list **stack)
 	return (max_bits);
 }
 
-void	radix_sort(t_list **stack_a, t_list **stack_b)
+static void	push_bit(t_list **stack_a, t_list **stack_b, int bit, int size)
 {
 	t_list	*head_a;
-	int		i;
 	int		j;
+
+	j = 0;
+	while (j++ < size)
+	{
+		head_a = *stack_a;
+		if (((head_a->index >> bit) & 1) == 1)
+			ra(stack_a);
+		else
+			pb(stack_a, stack_b);
+	}
+}
+
+void	radix_sort(t_list **stack_a, t_list **stack_b)
+{
+	int		i;
 	int		size;
 	int		max_bits;
 
 	i = 0;
-	head_a = *stack_a;
-	size = ft_lstsize(head_a);
+	size = ft_lstsize(*stack_a);
 	max_bits = get_max_bits(stack_a);
 	while (i < max_bits)
 	{
-		j = 0;
-		while (j++ < size)
-		{
-			head_a = *stack_a;
-			if (((head_a->index >> i) & 1) == 1)
-				ra(stack_a);
-			else
-				pb(stack_a, stack_b);
-		}
+		push_bit(stack_a, stack_b, i, size);
 		while (ft_lstsize(*stack_b) != 0)
 			pa(stack_a, stack_b);
 		i++;

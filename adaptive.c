@@ -13,16 +13,58 @@
 #include "push_swap.h"
 #include "bench.h"
 
-void	ft_adaptive_algo(t_list **a, t_list **b, t_bench *bench)
+static int	find_min_index(t_list **stack)
+{
+	t_list	*head;
+	int		min_idx;
+
+	head = *stack;
+	min_idx = head->index;
+	while (head)
+	{
+		if (head->index < min_idx)
+			min_idx = head->index;
+		head = head->next;
+	}
+	return (min_idx);
+}
+
+static void	solve_low_disorder(t_list **stack_a, t_list **stack_b)
+{
+	int	min_idx;
+	int	distance;
+
+	while (ft_lstsize(*stack_a) > 0)
+	{
+		min_idx = find_min_index(stack_a);
+		distance = get_distance(stack_a, min_idx);
+		make_top(stack_a, distance);
+		pb(stack_a, stack_b);
+	}
+	while (ft_lstsize(*stack_b) > 0)
+		pa(stack_a, stack_b);
+}
+
+void	adaptive_sort(t_list **stack_a, t_list **stack_b)
 {
 	float	disorder;
+	int		size;
 
-	disorder = compute_disorder(a);
-	g_current_bench = bench;
-	if (disorder < 0.2)
-		simple_sort(a, b);
-	else if (disorder < 0.5)
-		medium_sort(a, b);
+	size = ft_lstsize(*stack_a);
+	if (size <= 5)
+		return (simple_sort(stack_a, stack_b));
+	disorder = compute_disorder(stack_a);
+	if (disorder < 0.08)
+		solve_low_disorder(stack_a, stack_b);
+	else if (size <= 200 || disorder < 0.65)
+		medium_sort(stack_a, stack_b);
 	else
-		radix_sort(a, b);
+		radix_sort(stack_a, stack_b);
+}
+
+void	ft_adaptive_algo(t_list **stack_a, t_list **stack_b, t_bench *bench)
+{
+	g_current_bench = bench;
+	adaptive_sort(stack_a, stack_b);
+	g_current_bench = NULL;
 }

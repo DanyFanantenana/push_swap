@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int	word_count(char const *s, char c)
+static int	word_count(char const *s, char c)
 {
 	int	i;
 	int	count;
@@ -28,68 +28,67 @@ int	word_count(char const *s, char c)
 	return (count);
 }
 
-int	word_length(char const *s, char c)
+static char	*word_dup(char const *s, char c)
 {
-	int	i;
-	int	len;
+	char	*word;
+	int		len;
+	int		i;
 
-	i = 0;
 	len = 0;
-	while (s[i] != c && s[i] != '\0')
-	{
-		i++;
+	while (s[len] && s[len] != c)
 		len++;
+	word = (char *)malloc(sizeof(char) * (len + 1));
+	if (!word)
+		return (NULL);
+	i = 0;
+	while (i < len)
+	{
+		word[i] = s[i];
+		i++;
 	}
-	return (len);
+	word[i] = '\0';
+	return (word);
 }
 
-static void	fill_word(char **result, char const *s, int w_len)
+static void	free_result(char **result, int count)
 {
-	int	j;
-
-	j = 0;
-	while (j < w_len)
-	{
-		result[0][j] = s[j];
-		j++;
-	}
-	result[0][j] = '\0';
+	while (count > 0)
+		free(result[--count]);
+	free(result);
 }
 
-char	**f(char const *s, char c, char **result, int words_count)
+static int	add_word(char **result, int *i, char const **s, char c)
 {
-	int	i;
-	int	w_len;
-
-	while (*s == c)
-		s++;
-	i = -1;
-	while (++i < words_count)
-	{
-		while (*s == c)
-			s++;
-		w_len = word_length(s, c);
-		result[i] = (char *)malloc(sizeof(char) * (w_len + 1));
-		if (!(result[i]))
-			return (NULL);
-		fill_word(&result[i], s, w_len);
-		s += w_len;
-	}
-	return (result);
+	result[*i] = word_dup(*s, c);
+	if (!result[*i])
+		return (0);
+	(*i)++;
+	while (**s && **s != c)
+		(*s)++;
+	return (1);
 }
 
 char	**ft_split(char const *s, char c)
 {
 	char	**result;
-	int		wcount;
+	int		i;
 
 	if (!s)
 		return (NULL);
-	wcount = word_count(s, c);
-	result = (char **)malloc(sizeof(char *) * (wcount + 1));
-	if (!(result))
+	result = (char **)malloc(sizeof(char *) * (word_count(s, c) + 1));
+	if (!result)
 		return (NULL);
-	result = f(s, c, result, wcount);
-	result[wcount] = NULL;
+	i = 0;
+	while (*s)
+	{
+		while (*s == c)
+			s++;
+		if (*s)
+		{
+			if (!add_word(result, &i, &s, c))
+				return (free_result(result, i), NULL);
+		}
+	}
+	result[i] = NULL;
 	return (result);
 }
